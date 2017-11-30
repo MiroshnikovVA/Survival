@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 795e121b2ceb49d45946df932b0583dd, type: 3}
+  m_Name: WoodlandsMapTemplate
+  m_EditorClassIdentifier: 
+  Trees:
+  - {fileID: 114692555976685822, guid: e9f718b4ef3dace45bc72979e0350fef, type: 2}
+  - {fileID: 114250597551177530, guid: c59011bfa7a2a1e41a9eca74672e3426, type: 2}
+  - {fileID: 114308481152752676, guid: ecad07561cd0ed94eb491d1acc4e991d, type: 2}
+  - {fileID: 114758327999668216, guid: 3932034e93e8c594680c7ebaba2713c5, type: 2}
+  - {fileID: 114152111533817456, guid: 03e6f5b8ba1654441851c26b0cf6a9a2, type: 2}
+  MeadowObjects:
+  - {fileID: 114038072790441642, guid: c480afff432451f419ea820fec866bd2, type: 2}
+  - {fileID: 114509705371160376, guid: cbcc1295f70144d40a40b93877154a49, type: 2}
+  - {fileID: 114412152887311916, guid: 36280d55f17613e4fb99c09346d1f4ac, type: 2}
+  - {fileID: 114659288459763528, guid: bdcc4d95ffddbbf429d9e41ad7feae04, type: 2}
+  TownObjects:
+  - {fileID: 114433481554861746, guid: edd69611cf85d204a9d07d3d44ff5e97, type: 2}
+  - {fileID: 114159569629149910, guid: 8d0abce6794b5e648a9cff5441aeae43, type: 2}
+  - {fileID: 114441447523777694, guid: 7e2287f22fa12304595dfa1354396ba7, type: 2}
+  Stowns:
+  - {fileID: 114412152887311916, guid: 36280d55f17613e4fb99c09346d1f4ac, type: 2}
+  - {fileID: 114659288459763528, guid: bdcc4d95ffddbbf429d9e41ad7feae04, type: 2}
+  ForestCount: 60
+  TownCount: 5
+  StownsCount: 7
+  TownMaxRadius: 6
+  TownMinRadius: 2
+  ForestMinRadius: 10
+  ForestMaxRadius: 20
+  StownsMinRadius: 2
+  StownsMaxRadius: 5
+  TreesPerSquareMeter: 1.75
+  MeadowObjectInSquareMeter: 0.1
+  TownObjectsPerSquareMeter: 4
+  StownsPerSquareMeter: 2
