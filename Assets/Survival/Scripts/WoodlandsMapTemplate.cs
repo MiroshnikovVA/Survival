@@ -109,16 +109,16 @@ namespace Survival {
 		}
 
 		public override MapObject GetPrefab(int prefabIndex) {
-			if (prefabIndex < Trees.Length) {
+			if (prefabIndex < Trees.Length)
 				return Trees[prefabIndex];
-			} else if (prefabIndex < Trees.Length + MeadowObjects.Length) {
+
+			if (prefabIndex < Trees.Length + MeadowObjects.Length)
 				return MeadowObjects[prefabIndex - Trees.Length];
-			} else if (prefabIndex < Trees.Length + MeadowObjects.Length + TownObjects.Length) {
+
+			if (prefabIndex < Trees.Length + MeadowObjects.Length + TownObjects.Length)
 				return TownObjects[prefabIndex - Trees.Length - MeadowObjects.Length];
-			}
-			else {
-				return Stowns[prefabIndex - Trees.Length - MeadowObjects.Length - TownObjects.Length];
-			}
+
+			return Stowns[prefabIndex - Trees.Length - MeadowObjects.Length - TownObjects.Length];
 		}
 	}
 }
