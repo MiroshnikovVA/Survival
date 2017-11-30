@@ -27,7 +27,7 @@ namespace Survival {
 			_animator.SetFloat("Velocity", v);
 			var moving = v > 0.001f;
 			_animator.SetBool("Moving", moving);
-			_character.Move((Velocity + Vector3.down) * Time.deltaTime * Speed);
+			_character.Move((Velocity + (_character.isGrounded?Vector3.zero:Vector3.down)) * Time.deltaTime * Speed);
 			if (moving) {
 				transform.rotation = Quaternion.Lerp(
 					transform.rotation,

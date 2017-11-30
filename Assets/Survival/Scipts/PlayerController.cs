@@ -44,7 +44,8 @@ namespace Survival {
 
 		// Update is called once per frame
 		void Update() {
-			CameraTransform.position = _cameraDeltaPos + Character.transform.position;
+			var pos = Character.transform.position;
+			CameraTransform.position = new Vector3(_cameraDeltaPos.x + pos.x, _cameraDeltaPos.y, _cameraDeltaPos.z + pos.z);
 			var newPos = MapControoller.Map.Config.GetCoordinate(Character.transform.position);
 			var dx = _characterPosition.X - newPos.X;
 			var dz = _characterPosition.Z - newPos.Z;
