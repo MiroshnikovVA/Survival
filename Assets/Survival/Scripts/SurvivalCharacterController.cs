@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Survival {
 
 	[RequireComponent(typeof(CharacterController))]
 	[RequireComponent(typeof(Animator))]
-	public class SurvivalCharacterController : MonoBehaviour {
+	public class SurvivalCharacterController : NetworkBehaviour {
 
 		public Vector3 Velocity;
 		public float Speed = 10f;
@@ -18,8 +19,27 @@ namespace Survival {
 			_character = GetComponent<CharacterController>();
 		}
 
-		public void Attack() {
+		private void Start() {
+			if (isLocalPlayer) {
+				PlayerController.Inctance.Character = this;
+			} else {
+				enabled = false;
+			}
+		}
+
+		[Command]
+		public void CmdAtack() {
+			RpcAtack();
+		}
+
+		[ClientRpc]
+		public void RpcAtack() {
 			_animator.SetTrigger("Lumbering");
+		}
+
+
+		public void Attack() {
+			CmdAtack();
 		}
 
 		void Update() {

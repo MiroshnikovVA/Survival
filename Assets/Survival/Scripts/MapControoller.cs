@@ -1,18 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-
+using UnityEngine.Networking;
 
 namespace Survival {
-	public class MapControoller : MonoBehaviour {
 
-		public Map Map;
+	public class MapControoller : NetworkBehaviour {
+
+
+		public Map.MapConfig MapConfig;
+
+		[SyncVar]
+		public int RandomMapIndex = -1;
+
 		public MapTemplate MapTemplate;
-		public bool AutoGenerateNewMap = true;
 		[Range(2,25)]
 		public int PlayerViewRange = 3;
 		HashSet<Map.Element> _visibleElements = new HashSet<Map.Element>();
 		Dictionary<int, MapObject> _visibleObjects = new Dictionary<int, MapObject>();
+		Map _map = new Map();
+		private Coroutine _mapChangeCoroutine;
 
 		private void OnDrawGizmosSelected() {
 			GizmosDrawFrame();
@@ -23,8 +31,8 @@ namespace Survival {
 			var right = transform.right;
 			var forward = transform.forward;
 			var zero = transform.position;
-			var xhl = right * Map.Config.SizeX * 0.5f;
-			var zhl = forward * Map.Config.SizeZ * 0.5f;
+			var xhl = right * _map.Config.SizeX * 0.5f;
+			var zhl = forward * _map.Config.SizeZ * 0.5f;
 			Gizmos.color = Color.white;
 			Gizmos.DrawLine(zero - xhl + zhl, zero + xhl + zhl);
 			Gizmos.DrawLine(zero + xhl - zhl, zero + xhl + zhl);
@@ -36,12 +44,12 @@ namespace Survival {
 			var right = transform.right;
 			var forward = transform.forward;
 			var zero = transform.position;
-			var xhl = right * Map.Config.SizeX * 0.5f;
-			var zhl = forward * Map.Config.SizeZ * 0.5f;
-			var xSize = right * Map.Config.CellSize;
-			var zSize = forward * Map.Config.CellSize;
-			var xC = (int)(Map.Config.SizeX / Map.Config.CellSize);
-			var zC = (int)(Map.Config.SizeZ / Map.Config.CellSize);
+			var xhl = right * _map.Config.SizeX * 0.5f;
+			var zhl = forward * _map.Config.SizeZ * 0.5f;
+			var xSize = right * _map.Config.CellSize;
+			var zSize = forward * _map.Config.CellSize;
+			var xC = (int)(_map.Config.SizeX / _map.Config.CellSize);
+			var zC = (int)(_map.Config.SizeZ / _map.Config.CellSize);
 
 			Gizmos.color = Color.black;
 
@@ -61,15 +69,21 @@ namespace Survival {
 		}
 
 		public void GenerateNewMap() {
-			MapTemplate.Generate(Map);
+			_map.Config = MapConfig;
+			Random.InitState(RandomMapIndex);
+			MapTemplate.Generate(_map);
 		}
 
 		public void ClearMap() {
-			Map.Clear();
+			_map.Clear();
+			//foreach (var obj in _visibleObjects) {
+			//	MapObjectPool.Instance.Return(obj.Value);
+			//}
+			//_visibleObjects.Clear();
 		}
 
 		public void SetPlayerPosition(Vector3 position) {
-			var actualElements = Map.GetNearestElements(position, PlayerViewRange);
+			var actualElements = _map.GetNearestElements(position, PlayerViewRange);
 			var oldVisibleElements = _visibleElements;
 			var newVisibleElements = new HashSet<Map.Element>();
 
@@ -112,12 +126,23 @@ namespace Survival {
 			}
 		}
 
-		void Start() {
-			if (AutoGenerateNewMap) {
-				ClearMap();
-				GenerateNewMap();
-			}
-			SetPlayerPosition(Vector3.zero);
+		private void OnEnable() {
+			StartCoroutine(MapChange());
+		}
+
+		public void Start() {
+			if (isServer) {
+				RandomMapIndex = Random.Range(0, int.MaxValue);
+			};
+		}
+
+		IEnumerator MapChange() {
+			var oldRandomMapIndex = RandomMapIndex;
+			yield return new WaitWhile(() => oldRandomMapIndex != RandomMapIndex);
+			ClearMap();
+			GenerateNewMap();
+			PlayerController.Inctance.MapControoller = this;
+			SetPlayerPosition(PlayerController.Inctance.Character.transform.position);
 		}
 	}
 
